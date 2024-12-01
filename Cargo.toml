@@ -5,3 +5,6 @@ edition = "2021"
 
 [dependencies]
 wide = "0.7.30"
+
+[dev-dependencies]
+criterion = { package = "codspeed-criterion-compat", version = "*" }
