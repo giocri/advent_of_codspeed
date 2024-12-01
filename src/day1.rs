@@ -71,7 +71,7 @@ pub fn part2(input: &str) -> impl Display {
                     vec2[progress + 7],
                 ]);
                 //let check: i32x4 = left.into();
-                let count = 4 + check.cmp_lt(block).reduce_add();
+                let count = 8 + check.cmp_lt(block).reduce_add();
                 progress += count as usize;
                 out += count * left;
                 if count < 8 {
