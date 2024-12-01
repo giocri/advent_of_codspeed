@@ -23,8 +23,8 @@ pub fn part1(input: &str) -> impl Display {
 pub fn part2(input: &str) -> impl Display {
     let mut vec1 = Vec::new();
     let mut vec2 = Vec::new();
-    vec1.reserve(10000);
-    vec2.reserve(10000);
+    vec1.reserve(1000);
+    vec2.reserve(1000);
     for line in input.lines() {
         let mut row = line.split_ascii_whitespace();
         vec1.push(row.next().unwrap().parse::<i32>().unwrap());
