@@ -58,23 +58,20 @@ pub fn part2(input: &str) -> impl Display {
                 progress += 1;
             }
         }
+        let check: i32x4 = left.into();
         'count: {
-            while progress < vec2.len() - 7 {
-                let block = i32x8::new([
+            while progress < vec2.len() - 3 {
+                let block = i32x4::new([
                     vec2[progress],
                     vec2[progress + 1],
                     vec2[progress + 2],
                     vec2[progress + 3],
-                    vec2[progress + 4],
-                    vec2[progress + 5],
-                    vec2[progress + 6],
-                    vec2[progress + 7],
                 ]);
                 //let check: i32x4 = left.into();
-                let count = 8 + check.cmp_lt(block).reduce_add();
+                let count = 4 + check.cmp_lt(block).reduce_add();
                 progress += count as usize;
                 out += count * left;
-                if count < 8 {
+                if count < 4 {
                     break 'count;
                 }
             }
