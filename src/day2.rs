@@ -1,4 +1,4 @@
-use std::{fmt::Display, iter::once, slice::Iter};
+use std::{fmt::Display, iter::once, slice::Iter, usize};
 
 use wide::{i32x4, i32x8, CmpGt, CmpLt};
 fn check_row(row: &mut impl Iterator<Item = i32>) -> Option<usize> {
@@ -9,11 +9,12 @@ fn check_row(row: &mut impl Iterator<Item = i32>) -> Option<usize> {
     } else {
         sign = diff.signum();
     };
-    let i = 2;
+    let mut i = 2;
     while let Some(diff) = row.next() {
         if diff * sign < 1 || diff.abs() > 3 {
             return Some(i);
         }
+        i += 1;
     }
     None
 }
@@ -36,34 +37,14 @@ pub fn part2(input: &str) -> impl Display {
         let row = line.split_ascii_whitespace();
         let row: Vec<i32> = row.map(|a| a.parse::<i32>().unwrap()).collect();
         if let Some(x) = check_row(&mut row.windows(2).map(|a| (a[1] - a[0]))) {
-            let joint = row[x + 1] - row[x - 1];
-            let mut v2 = row[..x]
-                .windows(2)
-                .map(|a| (a[1] - a[0]))
-                .chain(once(joint))
-                .chain(row[(x + 1)..].windows(2).map(|a| (a[1] - a[0])));
-            if check_row(&mut v2) == None {
+            if check_walid_without_x(x, &row) {
                 out += 1;
                 continue 'a;
             }
             if x > 0 {
-                let joint = row[x + 1] - row[x - 1];
-                if x > 1 {
-                    let mut v3 = row[..x - 1]
-                        .windows(2)
-                        .map(|a| (a[1] - a[0]))
-                        .chain(once(joint))
-                        .chain(row[(x + 1)..].windows(2).map(|a| (a[1] - a[0])));
-                    if check_row(&mut v3) == None {
-                        out += 1;
-                        continue 'a;
-                    }
-                } else {
-                    let mut v3 = row[(x + 1)..].windows(2).map(|a| (a[1] - a[0]));
-                    if check_row(&mut v3) == None {
-                        out += 1;
-                        continue 'a;
-                    };
+                if check_walid_without_x(x - 1, &row) {
+                    out += 1;
+                    continue 'a;
                 }
             }
             if x == 2 {
@@ -78,4 +59,31 @@ pub fn part2(input: &str) -> impl Display {
         }
     }
     out
+}
+
+fn check_walid_without_x(x: usize, row: &Vec<i32>) -> bool {
+    if x == 0 {
+        let mut v3 = row[(1)..].windows(2).map(|a| (a[1] - a[0]));
+        if check_row(&mut v3) == None {
+            return true;
+        };
+        return false;
+    }
+    if x == row.len() - 1 {
+        let mut v3 = row[..x].windows(2).map(|a| (a[1] - a[0]));
+        if check_row(&mut v3) == None {
+            return true;
+        };
+        return false;
+    }
+    let joint = row[x + 1] - row[x - 1];
+    let mut v3 = row[..x]
+        .windows(2)
+        .map(|a| (a[1] - a[0]))
+        .chain(once(joint))
+        .chain(row[(x + 1)..].windows(2).map(|a| (a[1] - a[0])));
+    if check_row(&mut v3) == None {
+        return true;
+    }
+    return false;
 }
