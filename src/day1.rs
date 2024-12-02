@@ -18,8 +18,8 @@ pub fn part1(input: &str) -> impl Display {
     let mut i = 0;
     let len = vec1.len();
     while i < len - 7 {
-        let a: i32x8 = vec1[i..(i + 7)].into();
-        let b: i32x8 = vec2[i..(i + 7)].into();
+        let a: i32x8 = vec1[i..(i + 8)].into();
+        let b: i32x8 = vec2[i..(i + 8)].into();
         out += (a - b).abs().reduce_add();
         i += 8;
     }
