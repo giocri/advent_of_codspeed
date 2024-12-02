@@ -15,7 +15,15 @@ pub fn part1(input: &str) -> impl Display {
     vec1.sort_unstable();
     vec2.sort_unstable();
     let mut out = 0;
-    for i in 0..vec1.len() {
+    let mut i = 0;
+    let len = vec1.len();
+    while i < len - 7 {
+        let a: i32x8 = vec1[i..(i + 7)].into();
+        let b: i32x8 = vec2[i..(i + 7)].into();
+        out += (a - b).abs().reduce_add();
+        i += 8;
+    }
+    while i < len {
         out += (vec1[i] - vec2[i]).abs();
     }
     out
