@@ -23,7 +23,9 @@ pub fn part1(input: &str) -> impl Display {
     let mut out = 0;
     'a: for line in input.lines() {
         let row = line.split_ascii_whitespace();
-        let row: Vec<i32> = row.map(|a| a.parse::<i32>().unwrap()).collect();
+        let row: Vec<i32> = row
+            .map(|a| u32::from_str_radix(a, 10).unwrap() as i32)
+            .collect();
         if let Some(_) = check_row(&mut row.windows(2).map(|a| (a[1] - a[0]))) {
             continue 'a;
         }
@@ -35,7 +37,9 @@ pub fn part2(input: &str) -> impl Display {
     let mut out = 0;
     'a: for line in input.lines() {
         let row = line.split_ascii_whitespace();
-        let row: Vec<i32> = row.map(|a| a.parse::<i32>().unwrap()).collect();
+        let row: Vec<i32> = row
+            .map(|a| u32::from_str_radix(a, 10).unwrap() as i32)
+            .collect();
         if let Some(x) = check_row(&mut row.windows(2).map(|a| (a[1] - a[0]))) {
             if check_walid_without_x(x, &row) {
                 out += 1;

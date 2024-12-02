@@ -1,3 +1,3 @@
 fn main() {
-    println!("Hello, world!");
+    day2::part2(input)
 }
