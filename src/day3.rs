@@ -1,3 +1,7 @@
+use std::fmt::Display;
+
+use regex::Regex;
+
 pub fn part1(input: &str) -> impl Display {
     let regex = Regex::new(r"mul\((\d{1,3}),(\d{1,3})\)").unwrap();
     let out = regex
