@@ -1,6 +1,5 @@
-use std::{fmt::Display, iter::once, slice::Iter, usize};
+use std::{fmt::Display, iter::once, usize};
 
-use wide::{i32x4, i32x8, CmpGt, CmpLt};
 fn check_row(row: &mut impl Iterator<Item = i32>) -> Option<usize> {
     let diff = row.next().unwrap();
     let sign;
