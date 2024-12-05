@@ -1,4 +1,5 @@
 use std::{fmt::Display, iter, usize};
+use wide::{i32x4, i32x8, u8x16, CmpGt, CmpLt};
 const ROWS: i32 = 140;
 const COLUMNS: i32 = 140;
 const ROWSIZE: i32 = 141 + if cfg!(target_os = "windows") { 1 } else { 0 };
@@ -123,4 +124,101 @@ fn check_x(data: &[u8], i: i32) -> bool {
             && data[(i + offset(1, -1)) as usize] == b'S')
             || (data[(i + offset(-1, 1)) as usize] == b'S'
                 && data[(i + offset(1, -1)) as usize] == b'M'))
+}
+fn check_simd(data: &[u8], start: i32, len: i32, offsets: [i32; 3]) -> usize {
+    let iter = (start..(start + len)).step_by(16);
+    let mask = u8x16::ONE;
+    let x = u8x16::from(b'X');
+    let m = u8x16::from(b'M');
+    let a = u8x16::from(b'A');
+    let s = u8x16::from(b'S');
+    let check = [m, a, s];
+    let mut out = 0;
+    for p in iter.clone() {
+        let start = p as usize;
+        let mut valid = x.cmp_eq(u8x16::from(&data[start..(start + 8)]));
+        for i in 0..3 {
+            let start = (p + offsets[i]) as usize;
+            let tmp = check[i].cmp_eq(u8x16::from(&data[start..(start + 8)]));
+            valid &= tmp;
+        }
+        out += (valid & mask).to_array().iter().fold(0, |acc, x| acc + x) as usize;
+    }
+    if len % 16 == 0 {
+        return out;
+    }
+    out += (((len / 16) * 16)..len)
+        .filter(|&p| {
+            let p = p + start;
+            data[p as usize] == b'X'
+                && data[(p + offsets[0]) as usize] == b'M'
+                && data[(p + offsets[1]) as usize] == b'A'
+                && data[(p + offsets[2]) as usize] == b'S'
+        })
+        .count();
+    out
+}
+pub fn part1_1(input: &str) -> impl Display {
+    let mut out = 0;
+    let data = input.as_bytes();
+    let upperguard = 2;
+    let lowerguard = ROWS - 3;
+    for i in 0..ROWS {
+        let mut row_matches = 0;
+        let row_start = i * ROWSIZE;
+        if i > upperguard {
+            row_matches += check_simd(
+                data,
+                row_start,
+                COLUMNS,
+                [offset(-1, 0), offset(-2, 0), offset(-3, 0)],
+            );
+            row_matches += check_simd(
+                data,
+                row_start + 3,
+                COLUMNS - 3,
+                [offset(-1, -1), offset(-2, -2), offset(-3, -3)],
+            );
+            row_matches += check_simd(
+                data,
+                row_start,
+                COLUMNS - 3,
+                [offset(-1, 1), offset(-2, 2), offset(-3, 3)],
+            );
+        }
+        if i < lowerguard {
+            row_matches += check_simd(
+                data,
+                row_start,
+                COLUMNS,
+                [offset(1, 0), offset(2, 0), offset(3, 0)],
+            );
+            row_matches += check_simd(
+                data,
+                row_start + 3,
+                COLUMNS - 3,
+                [offset(1, -1), offset(2, -2), offset(3, -3)],
+            );
+            row_matches += check_simd(
+                data,
+                row_start,
+                COLUMNS - 3,
+                [offset(1, 1), offset(2, 2), offset(3, 3)],
+            );
+        }
+        row_matches += check_simd(
+            data,
+            row_start + 3,
+            COLUMNS - 3,
+            [offset(0, -1), offset(0, -2), offset(0, -3)],
+        );
+        row_matches += check_simd(
+            data,
+            row_start,
+            COLUMNS - 3,
+            [offset(0, 1), offset(0, 2), offset(0, 3)],
+        );
+        out += row_matches;
+    }
+    out
 }
