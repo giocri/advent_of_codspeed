@@ -10,9 +10,9 @@ pub fn part2(input: &str) -> impl Display {
             .push(u32::from_str_radix(line[3..5].as_ref(), 10).unwrap() as usize);
     }
     let mut out = 0;
-    /*for i in 0..100 {
-        constraints_map.sort();
-    }*/
+    for i in 0..100 {
+        constraints_map[i].sort();
+    }
     lines.next().unwrap();
     for _ in 0..UPDATES {
         let line = lines.next().unwrap();
@@ -22,9 +22,15 @@ pub fn part2(input: &str) -> impl Display {
             .collect();
         let old = pages.clone();
         pages.sort_by(|&a, &b| {
-            if constraints_map[a as usize].contains(&(b as usize)) {
+            if constraints_map[a as usize]
+                .binary_search(&(b as usize))
+                .is_ok()
+            {
                 cmp::Ordering::Less
-            } else if constraints_map[b as usize].contains(&(a as usize)) {
+            } else if constraints_map[b as usize]
+                .binary_search(&(a as usize))
+                .is_ok()
+            {
                 cmp::Ordering::Greater
             } else {
                 cmp::Ordering::Equal
@@ -44,6 +50,9 @@ pub fn part1(input: &str) -> impl Display {
         constraints_map[u32::from_str_radix(line[0..2].as_ref(), 10).unwrap() as usize]
             .push(u32::from_str_radix(line[3..5].as_ref(), 10).unwrap() as usize);
     }
+    for i in 0..100 {
+        constraints_map[i].sort();
+    }
     let mut out = 0;
     lines.next().unwrap();
     for _ in 0..UPDATES {
@@ -54,9 +63,15 @@ pub fn part1(input: &str) -> impl Display {
             .collect();
         let old = pages.clone();
         pages.sort_by(|&a, &b| {
-            if constraints_map[a as usize].contains(&(b as usize)) {
+            if constraints_map[a as usize]
+                .binary_search(&(b as usize))
+                .is_ok()
+            {
                 cmp::Ordering::Less
-            } else if constraints_map[b as usize].contains(&(a as usize)) {
+            } else if constraints_map[b as usize]
+                .binary_search(&(a as usize))
+                .is_ok()
+            {
                 cmp::Ordering::Greater
             } else {
                 cmp::Ordering::Equal
