@@ -2,7 +2,7 @@ use std::{fmt::Display, iter, usize};
 use wide::{i32x4, i32x8, u8x16, CmpGt, CmpLt};
 const ROWS: i32 = 140;
 const COLUMNS: i32 = 140;
-const ROWSIZE: i32 = 141 + if cfg!(target_os = "windows") { 1 } else { 0 };
+const ROWSIZE: i32 = 141; //+ if cfg!(target_os = "windows") { 1 } else { 0 };
 
 pub fn part2(input: &str) -> impl Display {
     let mut out = 0;
