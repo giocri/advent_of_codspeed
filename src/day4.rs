@@ -133,16 +133,23 @@ fn check_simd(data: &[u8], start: i32, len: i32, offsets: [i32; 3]) -> usize {
     let m = u8x16::from(b'M');
     let a = u8x16::from(b'A');
     let s = u8x16::from(b'S');
-    let check = [m, a, s];
+    //let check = [m, a, s];
     let mut out = 0;
     for p in iter.clone() {
-        let start = p as usize;
-        let mut valid = x.cmp_eq(u8x16::from(&data[start..(start + 8)]));
-        for i in 0..3 {
+        let start_x = p as usize;
+        let mut valid = x.cmp_eq(u8x16::from(&data[start_x..(start_x + 8)]));
+        let start_m = (p + offsets[0]) as usize;
+        let is_m = m.cmp_eq(u8x16::from(&data[start_m..(start_m + 8)]));
+        let start_a = (p + offsets[1]) as usize;
+        let is_a = a.cmp_eq(u8x16::from(&data[start_a..(start_a + 8)]));
+        let start_s = (p + offsets[2]) as usize;
+        let is_s = s.cmp_eq(u8x16::from(&data[start_s..(start_s + 8)]));
+        valid &= is_m & is_a & is_s;
+        /*for i in 0..3 {
             let start = (p + offsets[i]) as usize;
             let tmp = check[i].cmp_eq(u8x16::from(&data[start..(start + 8)]));
             valid &= tmp;
-        }
+        }*/
         out += (valid & mask).to_array().iter().fold(0, |acc, x| acc + x) as usize;
     }
     if len % 16 == 0 {
