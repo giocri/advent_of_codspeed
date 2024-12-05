@@ -18,7 +18,7 @@ pub fn part2(input: &str) -> impl Display {
     out
 }
 
-pub fn part1(input: &str) -> impl Display {
+/* pub fn part1_old(input: &str) -> impl Display {
     let mut out = 0;
     let bytes = input.as_bytes();
     let upperguard = 2;
@@ -82,10 +82,11 @@ pub fn part1(input: &str) -> impl Display {
         out += row_matches;
     }
     out
-}
+} */
 const fn offset(rows_offset: i32, colums_offset: i32) -> i32 {
     return rows_offset * (ROWSIZE as i32) + colums_offset;
 }
+/*
 fn check_match_up(data: &[u8], i: i32) -> bool {
     data[(i + offset(-1, 0)) as usize] == b'M'
         && data[(i + offset(-2, 0)) as usize] == b'A'
@@ -115,7 +116,7 @@ fn check_match_diag_up_right(data: &[u8], i: i32) -> bool {
     data[(i + offset(-1, 1)) as usize] == b'M'
         && data[(i + offset(-2, 2)) as usize] == b'A'
         && data[(i + offset(-3, 3)) as usize] == b'S'
-}
+}*/
 fn check_x(data: &[u8], i: i32) -> bool {
     ((data[(i + offset(-1, -1)) as usize] == b'M' && data[(i + offset(1, 1)) as usize] == b'S')
         || (data[(i + offset(-1, -1)) as usize] == b'S'
@@ -158,7 +159,7 @@ fn check_simd(data: &[u8], start: i32, len: i32, offsets: [i32; 3]) -> usize {
         .count();
     out
 }
-pub fn part1_1(input: &str) -> impl Display {
+pub fn part1(input: &str) -> impl Display {
     let mut out = 0;
     let data = input.as_bytes();
     let upperguard = 2;
