@@ -1,4 +1,4 @@
-use std::{char, cmp, collections::HashMap, fmt::Display, io::Cursor, path};
+use std::{char, cmp, collections::HashMap, fmt::Display, io::Cursor, path, usize};
 const COLUMS: usize = 130;
 const ROWS: usize = 130;
 pub fn part2(input: &str) -> impl Display {
@@ -7,14 +7,21 @@ pub fn part2(input: &str) -> impl Display {
     let mut cusor_dir = 0;
     let mut map = [0u8; COLUMS * ROWS];
     let mut path = [8u8; COLUMS * ROWS];
-    let mut obstacles = [0u8; COLUMS * ROWS];
+    let mut obstacles_v: Vec<Vec<usize>> = vec![Vec::new(); COLUMS];
+    let mut obstacles_h: Vec<Vec<usize>> = vec![Vec::new(); ROWS];
     for (pos, char) in input
         .bytes()
         .filter(|&a| a != b'\n' && a != b'\r')
         .enumerate()
     {
         match char {
-            b'#' => map[pos] = 255,
+            b'#' => {
+                map[pos] = 255;
+                let x = pos % COLUMS;
+                let y = pos / COLUMS;
+                obstacles_h[y].push(x);
+                obstacles_v[x].push(y);
+            }
             b'^' => {
                 cusor_pos_x = pos % COLUMS;
                 cusor_pos_y = pos / COLUMS;
@@ -97,17 +104,24 @@ pub fn part2(input: &str) -> impl Display {
     let out = path
         .iter()
         .enumerate()
-        .filter(|(i, &x)| {
+        .map(|(i, &x)| {
             if x != 8 {
-                map[*i] = 255;
-                let obstacle = loop_check(&map, start_cursor, start_x, start_y) > 0;
-                map[*i] = 0;
-                obstacle
+                let x = i % COLUMS;
+                let y = i / COLUMS;
+                better_loop_check(
+                    start_cursor,
+                    start_x,
+                    start_y,
+                    x,
+                    y,
+                    &obstacles_v,
+                    &obstacles_h,
+                )
             } else {
-                false
+                0
             }
         })
-        .count();
+        .fold(0, |acc, i| acc + i);
     out
 }
 pub fn part1(input: &str) -> impl Display {
@@ -273,4 +287,131 @@ fn loop_check(map: &[u8], dir: u8, pos_x: usize, pos_y: usize) -> u8 {
         }
     }
     0
+}
+fn better_loop_check(
+    dir: u8,
+    pos_x: usize,
+    pos_y: usize,
+    pos_obstacle_x: usize,
+    pos_obstacle_y: usize,
+    obstacles_v: &Vec<Vec<usize>>,
+    obstacles_h: &Vec<Vec<usize>>,
+) -> u32 {
+    let mut cusor_dir = dir;
+    let mut cusor_pos_y = pos_y;
+    let mut cusor_pos_x = pos_x;
+    let mut local_path = [8u8; COLUMS * ROWS];
+    'a: loop {
+        match cusor_dir {
+            0 => {
+                if let Some(mut y_obstacle) = searc(&obstacles_v[cusor_pos_x], cusor_pos_y, false) {
+                    if pos_obstacle_x == cusor_pos_x && pos_obstacle_y < cusor_pos_y {
+                        y_obstacle = cmp::max(y_obstacle, pos_obstacle_y);
+                    }
+                    let y = y_obstacle + 1;
+                    if local_path[y * COLUMS + cusor_pos_x] != 8 {
+                        return 1;
+                    }
+                    local_path[y * COLUMS + cusor_pos_x] = 0;
+                    cusor_pos_y = y;
+                    cusor_dir = 1;
+                    continue 'a;
+                } else if pos_obstacle_x == cusor_pos_x && pos_obstacle_y < cusor_pos_y {
+                    let y = pos_obstacle_y + 1;
+                    if local_path[y * COLUMS + cusor_pos_x] != 8 {
+                        return 1;
+                    }
+                    local_path[y * COLUMS + cusor_pos_x] = 0;
+                    cusor_pos_y = y;
+                    cusor_dir = 1;
+                    continue 'a;
+                }
+                break 'a;
+            }
+            1 => {
+                if let Some(mut x_obstacle) = searc(&obstacles_h[cusor_pos_y], cusor_pos_x, true) {
+                    if pos_obstacle_x == cusor_pos_y && pos_obstacle_x > cusor_pos_x {
+                        x_obstacle = cmp::min(x_obstacle, pos_obstacle_x);
+                    }
+                    let x = x_obstacle - 1;
+                    if local_path[cusor_pos_y * COLUMS + x] != 8 {
+                        return 1;
+                    }
+                    local_path[cusor_pos_y * COLUMS + x] = 1;
+                    cusor_pos_x = x;
+                    cusor_dir = 2;
+                    continue 'a;
+                } else if pos_obstacle_y == cusor_pos_y && pos_obstacle_x > cusor_pos_x {
+                    let x = pos_obstacle_x - 1;
+                    if local_path[cusor_pos_y * COLUMS + x] != 8 {
+                        return 1;
+                    }
+                    local_path[cusor_pos_y * COLUMS + x] = 1;
+                    cusor_pos_x = x;
+                    cusor_dir = 2;
+                    continue 'a;
+                }
+                break 'a;
+            }
+            2 => {
+                if let Some(mut y_obstacle) = searc(&obstacles_v[cusor_pos_x], cusor_pos_y, true) {
+                    if pos_obstacle_x == cusor_pos_x && pos_obstacle_y > cusor_pos_y {
+                        y_obstacle = cmp::min(y_obstacle, pos_obstacle_y);
+                    }
+                    let y = y_obstacle - 1;
+                    if local_path[y * COLUMS + cusor_pos_x] != 8 {
+                        return 1;
+                    }
+                    local_path[y * COLUMS + cusor_pos_x] = 2;
+                    cusor_pos_y = y;
+                    cusor_dir = 3;
+                    continue 'a;
+                } else if pos_obstacle_x == cusor_pos_x && pos_obstacle_y > cusor_pos_y {
+                    let y = pos_obstacle_y - 1;
+                    if local_path[y * COLUMS + cusor_pos_x] != 8 {
+                        return 1;
+                    }
+                    local_path[y * COLUMS + cusor_pos_x] = 2;
+                    cusor_pos_y = y;
+                    cusor_dir = 3;
+                    continue 'a;
+                }
+                break 'a;
+            }
+            3 => {
+                if let Some(mut x_obstacle) = searc(&obstacles_h[cusor_pos_y], cusor_pos_x, false) {
+                    if pos_obstacle_x == cusor_pos_y && pos_obstacle_x < cusor_pos_x {
+                        x_obstacle = cmp::max(x_obstacle, pos_obstacle_x);
+                    }
+                    let x = x_obstacle + 1;
+                    if local_path[cusor_pos_y * COLUMS + x] != 8 {
+                        return 1;
+                    }
+                    local_path[cusor_pos_y * COLUMS + x] = 3;
+                    cusor_pos_x = x;
+                    cusor_dir = 0;
+                    continue 'a;
+                } else if pos_obstacle_y == cusor_pos_y && pos_obstacle_x < cusor_pos_x {
+                    let x = pos_obstacle_x + 1;
+                    if local_path[cusor_pos_y * COLUMS + x] != 8 {
+                        return 1;
+                    }
+                    local_path[cusor_pos_y * COLUMS + x] = 3;
+                    cusor_pos_x = x;
+                    cusor_dir = 0;
+                    continue 'a;
+                }
+                break 'a;
+            }
+            _ => {}
+        }
+    }
+    0
+}
+fn searc(v: &Vec<usize>, pos: usize, greater: bool) -> Option<usize> {
+    if greater {
+        v.iter().map(|&a| a).filter(|&a| a > pos).next()
+    } else {
+        v.iter().rev().map(|&a| a).filter(|&a| a < pos).next()
+    }
 }
