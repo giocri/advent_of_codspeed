@@ -1,11 +1,4 @@
-use std::{
-    char,
-    cmp::{self, Ordering},
-    collections::HashMap,
-    fmt::Display,
-    io::Cursor,
-    path, usize,
-};
+use std::{cmp, fmt::Display, usize};
 const COLUMS: usize = 130;
 const ROWS: usize = 130;
 pub fn part2(input: &str) -> impl Display {
@@ -111,8 +104,8 @@ pub fn part2(input: &str) -> impl Display {
     let out = path
         .iter()
         .enumerate()
-        .map(|(i, &dir)| {
-            if dir != 8 {
+        .map(|(i, &x)| {
+            if x != 8 {
                 let x = i % COLUMS;
                 let y = i / COLUMS;
                 better_loop_check(
@@ -416,36 +409,9 @@ fn better_loop_check(
     0
 }
 fn searc(v: &Vec<usize>, pos: usize, greater: bool) -> Option<usize> {
-    let mut low = 0;
-    let mut high = v.len() - 1;
-    let mut best_fit = None;
-    while low <= high {
-        let mid = (low + high) / 2;
-
-        match v[mid].cmp(&pos) {
-            Ordering::Less => {
-                low = mid + 1;
-                if !greater {
-                    best_fit = Some(v[mid]);
-                }
-            }
-            Ordering::Greater => {
-                if greater {
-                    best_fit = Some(v[mid]);
-                }
-                if mid == 0 {
-                    break;
-                }
-                high = mid - 1;
-            }
-            Ordering::Equal => return Some(v[mid]),
-        }
-    }
-    best_fit
-
-    /*if greater {
+    if greater {
         v.iter().map(|&a| a).filter(|&a| a > pos).next()
     } else {
         v.iter().rev().map(|&a| a).filter(|&a| a < pos).next()
-    }*/
+    }
 }
