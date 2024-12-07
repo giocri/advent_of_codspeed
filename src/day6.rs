@@ -212,7 +212,7 @@ pub fn part1(input: &str) -> impl Display {
             _ => {}
         }
     }
-    let out = path.iter().map(|&a| a as u32).fold(0, |acc, i| acc + i);
+    let out = path.iter().map(|&a| a as u32).fold(1, |acc, i| acc + i);
     out
 }
 
