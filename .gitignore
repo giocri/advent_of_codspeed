@@ -1,8 +1,2 @@
 /target
-devinput.txt
-day5.txt
-day6.txt
-devinput.txt
-
-input7.txt
-input6.txt
+*.txt
