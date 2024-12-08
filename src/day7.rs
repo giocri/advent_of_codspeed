@@ -37,10 +37,11 @@ fn check_row(total: u64, row: &Vec<u64>) -> bool {
             continue 'a;
         }
         if branch_stack[depht] == 0 {
-            if total % row[depht] != 0 {
+            let divided = total / row[depht];
+            if divided * row[depht] != total {
                 branch_stack[depht] = 1;
             } else {
-                stack.push(total / row[depht]);
+                stack.push(divided);
                 branch_stack.push(0);
                 depht += 1;
             }
@@ -65,20 +66,6 @@ fn check_row(total: u64, row: &Vec<u64>) -> bool {
     return false;
 }
 pub fn part2(input: &str) -> impl Display {
-    /*let mut out = 0;
-    for line in input.lines() {
-        let mut line = line.split(':');
-        let total = u64::from_str_radix(line.next().unwrap(), 10).unwrap();
-        let row = line.next().unwrap().split_ascii_whitespace();
-        let row: Vec<u64> = row
-            .rev()
-            .map(|a| u64::from_str_radix(a, 10).unwrap())
-            .collect();
-        if check_row_concat(total, &row) {
-            out += total;
-        }
-    }
-    out*/
     input
         .lines()
         .map(|line| {
@@ -118,10 +105,11 @@ fn check_row_concat(total: u64, row: &Vec<u64>) -> bool {
             continue 'a;
         }
         if branch_stack[depht] == 0 {
-            if total % row[depht] != 0 {
+            let divided = total / row[depht];
+            if divided * row[depht] != total {
                 branch_stack[depht] = 1;
             } else {
-                stack.push(total / row[depht]);
+                stack.push(divided);
                 branch_stack.push(0);
                 depht += 1;
             }
