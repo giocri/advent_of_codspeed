@@ -65,7 +65,7 @@ fn check_row(total: u64, row: &Vec<u64>) -> bool {
     return false;
 }
 pub fn part2(input: &str) -> impl Display {
-    let mut out = 0;
+    /*let mut out = 0;
     for line in input.lines() {
         let mut line = line.split(':');
         let total = u64::from_str_radix(line.next().unwrap(), 10).unwrap();
@@ -78,7 +78,24 @@ pub fn part2(input: &str) -> impl Display {
             out += total;
         }
     }
-    out
+    out*/
+    input
+        .lines()
+        .map(|line| {
+            let mut line = line.split(':');
+            let total = u64::from_str_radix(line.next().unwrap(), 10).unwrap();
+            let row = line.next().unwrap().split_ascii_whitespace();
+            let row: Vec<u64> = row
+                .rev()
+                .map(|a| u64::from_str_radix(a, 10).unwrap())
+                .collect();
+            if check_row_concat(total, &row) {
+                total
+            } else {
+                0u64
+            }
+        })
+        .fold(0, |acc, i| acc + i)
 }
 fn check_row_concat(total: u64, row: &Vec<u64>) -> bool {
     let mut stack = Vec::new();
