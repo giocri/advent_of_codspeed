@@ -37,11 +37,10 @@ fn check_row(total: u64, row: &Vec<u64>) -> bool {
             continue 'a;
         }
         if branch_stack[depht] == 0 {
-            let divided = total / row[depht];
-            if divided * row[depht] != total {
+            if total % row[depht] != 0 {
                 branch_stack[depht] = 1;
             } else {
-                stack.push(divided);
+                stack.push(total / row[depht]);
                 branch_stack.push(0);
                 depht += 1;
             }
@@ -105,11 +104,10 @@ fn check_row_concat(total: u64, row: &Vec<u64>) -> bool {
             continue 'a;
         }
         if branch_stack[depht] == 0 {
-            let divided = total / row[depht];
-            if divided * row[depht] != total {
+            if total % row[depht] != 0 {
                 branch_stack[depht] = 1;
             } else {
-                stack.push(divided);
+                stack.push(total / row[depht]);
                 branch_stack.push(0);
                 depht += 1;
             }
