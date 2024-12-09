@@ -3,7 +3,7 @@ use std::{fmt::Display, iter};
 use num::integer::gcd;
 const COLUMS: i32 = 50;
 const ROWS: i32 = 50;
-const ROWSIZE: i32 = 52;
+const ROWSIZE: i32 = 51;
 pub fn part1(input: &str) -> impl Display {
     let mut frequencies: Vec<Vec<(i32, i32)>> = vec![Vec::new(); 62];
     let mapping_iter = input.as_bytes().iter().enumerate().filter_map(|(pos, &a)| {
