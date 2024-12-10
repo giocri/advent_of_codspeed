@@ -1,11 +1,11 @@
 use std::{cmp, fmt::Display, iter::once, process::Output};
 
 pub fn part1(input: &str) -> impl Display {
-    let bytes = &input.as_bytes()[0..input.len() - 1];
+    let bytes = input.as_bytes();
     let parsed = bytes
         .chunks_exact(2)
         .map(|f| (f[0] as u32 - 48, f[1] as u32 - 48))
-        .chain(once((input.as_bytes()[input.len() - 1] as u32 - 48, 0u32)))
+        .chain(once((bytes[bytes.len() - 1] as u32 - 48, 0u32)))
         .enumerate();
     let mut files = Vec::new();
     let mut out = Vec::new();
