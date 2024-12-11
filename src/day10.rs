@@ -1,6 +1,5 @@
 use std::{collections::HashSet, fmt::Display};
 use wide::u8x16;
-use Debug;
 const COLUMS: usize = 44;
 const ROWS: usize = 44;
 const ROWSIZE: usize = 45;
