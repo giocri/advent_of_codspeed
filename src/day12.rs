@@ -1,4 +1,4 @@
-use std::{char, cmp, fmt::Display, str::from_utf8};
+use std::{cmp, fmt::Display};
 struct Scan {
     simble: u8,
     checked: bool,
