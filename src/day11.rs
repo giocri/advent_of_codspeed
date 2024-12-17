@@ -1,5 +1,4 @@
 use count_digits::CountDigits;
-use itertools::{GroupBy, Itertools};
 use std::{collections::HashMap, fmt::Display};
 enum NextMove {
     SINGLE(u64),

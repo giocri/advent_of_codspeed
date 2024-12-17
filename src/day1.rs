@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-use wide::{i32x4, i32x8, CmpGt, CmpLt};
+use wide::{i32x8, CmpGt, CmpLt};
 
 pub fn part1(input: &str) -> impl Display {
     let mut vec1 = Vec::new();

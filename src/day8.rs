@@ -1,4 +1,4 @@
-use std::{fmt::Display, iter};
+use std::fmt::Display;
 
 use num::integer::gcd;
 const COLUMS: i32 = 50;

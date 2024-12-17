@@ -1,4 +1,4 @@
-use std::{cmp, fmt::Display, iter::once, process::Output};
+use std::{cmp, fmt::Display, iter::once};
 
 pub fn part1(input: &str) -> impl Display {
     let bytes = input.as_bytes();

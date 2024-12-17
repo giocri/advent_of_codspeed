@@ -1,4 +1,4 @@
-use std::{cmp, collections::HashMap, fmt::Display};
+use std::{cmp, fmt::Display};
 //const CONSTRAINTS: i32 = 1176;
 //const UPDATES: i32 = 1377 - 1177;
 pub fn part2(input: &str) -> impl Display {

@@ -47,7 +47,7 @@ pub fn part2(input: &str) -> impl Display {
     let start_x = cusor_pos_x;
     let start_y = cusor_pos_y;
     let start_cursor = cusor_dir;
-    let mut out = 0;
+    //let mut out = 0;
     'a: loop {
         match cusor_dir {
             0 => {
@@ -216,7 +216,7 @@ pub fn part1(input: &str) -> impl Display {
     out
 }
 
-fn loop_check(map: &[u8], dir: u8, pos_x: usize, pos_y: usize) -> u8 {
+/*fn loop_check(map: &[u8], dir: u8, pos_x: usize, pos_y: usize) -> u8 {
     let mut cusor_dir = dir;
     let mut cusor_pos_y = pos_y;
     let mut cusor_pos_x = pos_x;
@@ -287,7 +287,7 @@ fn loop_check(map: &[u8], dir: u8, pos_x: usize, pos_y: usize) -> u8 {
         }
     }
     0
-}
+}*/
 fn better_loop_check(
     dir: u8,
     pos_x: usize,

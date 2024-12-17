@@ -1,5 +1,5 @@
-use std::{fmt::Display, iter, usize};
-use wide::{i32x4, i32x8, u8x16, CmpGt, CmpLt};
+use std::{fmt::Display, usize};
+use wide::u8x16;
 const ROWS: i32 = 140;
 const COLUMNS: i32 = 140;
 const ROWSIZE: i32 = 141; //+ if cfg!(target_os = "windows") { 1 } else { 0 };
