@@ -96,7 +96,7 @@ pub fn part2(input: &str) -> impl Display {
             head = previous;
         }
     }
-    in_path.iter().fold(0u32, |acc, x| acc + *x as u32)
+    in_path.iter().fold(0u32, |acc, x| acc + *x as u32) + 1
 }
 fn find_paths_from_point(
     start: i32,
