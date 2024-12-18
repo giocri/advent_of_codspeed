@@ -3,7 +3,7 @@ use std::fs;
 fn main() {
     println!(
         "{}",
-        advent_of_codspeed::day16::part1(
+        advent_of_codspeed::day17::part1(
             fs::read_to_string("devinput.txt")
                 .expect("Error in reading the file")
                 .as_str()
@@ -11,7 +11,7 @@ fn main() {
     );
     println!(
         "{}",
-        advent_of_codspeed::day16::part2(
+        advent_of_codspeed::day17::part2(
             fs::read_to_string("devinput.txt")
                 .expect("Error in reading the file")
                 .as_str()
