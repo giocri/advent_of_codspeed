@@ -1,9 +1,8 @@
-use std::{collections::VecDeque, fmt::Display, io::stdin, usize};
+use std::{collections::VecDeque, fmt::Display};
 const COLUMS: usize = 50;
 const ROWS: usize = 50;
 const ROWSIZE: usize = 51;
 const COLUMS_P2: usize = 100;
-const ROWSIZE_P2: usize = 100;
 
 pub fn part1(input: &str) -> impl Display {
     let input = input.as_bytes();

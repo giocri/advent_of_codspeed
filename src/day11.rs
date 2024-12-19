@@ -11,7 +11,7 @@ pub fn part1(input: &str) -> impl Display {
     let mut generated: Vec<(u64, u64)> = Vec::new();
     for n in input.split_ascii_whitespace() {
         let num = u64::from_str_radix(n, 10).unwrap();
-        if let Some((next, amount)) = stones.get_mut(&num) {
+        if let Some((_next, amount)) = stones.get_mut(&num) {
             *amount += 1;
         } else {
             if n.len() % 2 == 0 {
@@ -70,7 +70,7 @@ pub fn part2(input: &str) -> impl Display {
     let mut generated: Vec<(u64, u64)> = Vec::new();
     for n in input.split_ascii_whitespace() {
         let num = u64::from_str_radix(n, 10).unwrap();
-        if let Some((next, amount)) = stones.get_mut(&num) {
+        if let Some((_next, amount)) = stones.get_mut(&num) {
             *amount += 1;
         } else {
             if n.len() % 2 == 0 {

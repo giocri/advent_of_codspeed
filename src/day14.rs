@@ -1,7 +1,5 @@
 use std::fmt::Display;
 
-use itertools::Chunk;
-
 const COLUMS: u32 = 101;
 const ROWS: u32 = 103;
 

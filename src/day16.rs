@@ -1,8 +1,4 @@
-use std::{
-    collections::{BinaryHeap, HashSet},
-    fmt::Display,
-    io::stdin,
-};
+use std::{collections::BinaryHeap, fmt::Display};
 //const COLUMS: usize = 15;
 //const ROWS: usize = 15;
 const ROWSIZE: usize = 142;
@@ -62,7 +58,7 @@ pub fn part2(input: &str) -> impl Display {
     let mut optimal_paths: Vec<usize> = Vec::new();
     optimal_paths.push(pevious_tiles.len() - 1);
     let optimal_score = final_score.unwrap();
-    let mut found_score: Option<i32> = None;
+    //let mut found_score: Option<i32> = None;
     loop {
         let mut found_score = None;
         while found_score == None {

@@ -1,9 +1,4 @@
-use std::error::Error;
-use std::{
-    cmp,
-    collections::{hash_map, HashMap},
-    fmt::Display,
-};
+use std::{collections::HashMap, fmt::Display};
 
 pub fn part1(input: &str) -> impl Display {
     let mut machine_cost_map: HashMap<(u64, u64), Option<u64>> = HashMap::new();
@@ -64,102 +59,6 @@ pub fn part2(input: &str) -> impl Display {
     out
 }
 
-fn search(
-    machine_cost_map: &mut HashMap<(u64, u64), Option<u64>>,
-    ax: u64,
-    ay: u64,
-    bx: u64,
-    by: u64,
-    gx: u64,
-    gy: u64,
-    depth: u64,
-    current_x: u64,
-    current_y: u64,
-) -> Option<u64> {
-    /*if depth == 200 {
-        return None;
-    }*/
-    if current_x > gx || current_y > gy {
-        return None;
-    }
-    if current_x == gx && current_y == gy {
-        return Some(0);
-    }
-    if let Some(cost) = machine_cost_map.get(&(current_x, current_y)) {
-        return *cost;
-    };
-    let c1 = search(
-        machine_cost_map,
-        ax,
-        ay,
-        bx,
-        by,
-        gx,
-        gy,
-        depth + 1,
-        current_x + ax,
-        current_y + ay,
-    );
-    let c2 = search(
-        machine_cost_map,
-        ax,
-        ay,
-        bx,
-        by,
-        gx,
-        gy,
-        depth + 1,
-        current_x + bx,
-        current_y + by,
-    );
-    let out = match (c1, c2) {
-        (Some(x), None) => Some(x + 3),
-        (None, Some(x)) => Some(x + 1),
-        (Some(x), Some(y)) => Some(cmp::min(x + 3, y + 1)),
-        (None, None) => None,
-    };
-    machine_cost_map.insert((current_x, current_y), out);
-    out
-}
-fn search_iter(
-    machine_cost_map: &mut HashMap<(u64, u64), Option<u64>>,
-    ax: u64,
-    ay: u64,
-    bx: u64,
-    by: u64,
-    gx: u64,
-    gy: u64,
-) -> Option<u64> {
-    /*if depth == 200 {
-        return None;
-    }*/
-    machine_cost_map.insert((gx, gy), Some(0));
-    let mut requests_stack = Vec::new();
-    requests_stack.push((0, 0));
-    while let Some((current_x, current_y)) = requests_stack.pop() {
-        if current_x > gx || current_y > gy {
-            machine_cost_map.insert((current_x, current_y), None);
-        }
-        let Some(c1) = machine_cost_map.get(&(current_x + ax, current_y + ay)) else {
-            requests_stack.push((current_x, current_y));
-            requests_stack.push((current_x + ax, current_y + ay));
-            continue;
-        };
-        let Some(c2) = machine_cost_map.get(&(current_x + bx, current_y + by)) else {
-            requests_stack.push((current_x, current_y));
-            requests_stack.push((current_x + bx, current_y + by));
-            continue;
-        };
-        let out = match (c1, c2) {
-            (Some(x), None) => Some(x + 3),
-            (None, Some(x)) => Some(x + 1),
-            (Some(x), Some(y)) => Some(cmp::min(x + 3, y + 1)),
-            (None, None) => None,
-        };
-        machine_cost_map.insert((current_x, current_y), out);
-    }
-    return *machine_cost_map.get(&(0, 0)).unwrap();
-}
 fn search_linear(ax: i64, ay: i64, bx: i64, by: i64, gx: i64, gy: i64) -> Option<u64> {
     // a*ax+b*bx=gx
     // a*ay+b*by=gy
