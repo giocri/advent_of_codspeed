@@ -1,5 +1,3 @@
-use std::collections::{hash_map, HashMap};
-
 const CUTOFF: i32 = 100;
 const COLUMS: usize = 141;
 const ROWS: usize = 141;
