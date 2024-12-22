@@ -307,7 +307,7 @@ pub fn part2(input: &str) -> u32 {
     }
     out
 }
-fn digit_sequence(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) -> u32 {
+fn digit_sequence2(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) -> u32 {
     let bytes = input.as_bytes();
     let mut sequence: Vec<(u8, u8)> = Vec::new();
     let mut a = 0;
