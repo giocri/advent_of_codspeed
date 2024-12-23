@@ -72,7 +72,7 @@ pub fn part2(input: &str) -> u32 {
             delta[i] = new_price as i32 - old_price as i32;
             old_price = new_price;
         }
-        for i in 4..2000 {
+        for i in 4..=2000 {
             let start = i % 4;
             let key = (delta[start] + 9)
                 + (delta[(start + 1) % 4] + 9) * 20

@@ -12,7 +12,7 @@ fn main() {
     println!(
         "{}",
         advent_of_codspeed::day22::part2(
-            fs::read_to_string("input22.txt")
+            fs::read_to_string("devinput.txt")
                 .expect("Error in reading the file")
                 .as_str()
         )
