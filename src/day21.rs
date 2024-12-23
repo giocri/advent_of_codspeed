@@ -215,7 +215,6 @@ fn digit_sequence(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) ->
                 unreachable!()
             }
         };
-        //print!("a:{} b:{} ", a, b);
         if a == b {
             let len = sequence.len();
             sequence[len - 1].1 += 1;
@@ -243,8 +242,6 @@ fn digit_sequence(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) ->
         let mut a = 0;
         for (b, amount) in sequence.iter() {
             let b = *b;
-            //v<A<AA>>^AvAA<^A>Av<<A>>^AvA^Av<A>^Av<<A>^A>AAvA^Av<A<A>>^AAAvA<^A>A
-            //<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A
             if a == b {
                 let len = new_sequence.len();
                 new_sequence[len - 1].1 += 1;
@@ -252,7 +249,6 @@ fn digit_sequence(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) ->
             }
             let index = a * 5 * 4 + b * 4;
             let mut last = 0;
-            //let mut consecutives = 1;
             a = b;
             for i in 0..4 {
                 let next = lookup_arrow_pad[index as usize + i];
@@ -263,22 +259,15 @@ fn digit_sequence(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) ->
                 }
                 new_sequence.push((next, 1));
                 if next == 0 {
-                    //new_sequence.push((0, 1));
                     break;
                 }
                 last = next;
-                //consecutives = 1;
             }
             let len = new_sequence.len();
             new_sequence[len - 1].1 += amount - 1;
         }
         sequence = new_sequence;
     }
-    /*for (b, amount) in sequence.iter() {
-        for _ in 0..*amount {
-            print!("{}", DEBUGSTRING.as_bytes()[*b as usize] as char);
-        }
-    }*/
     sequence
         .iter()
         .fold(0, |acc, (_, amount)| acc + *amount as u32)
@@ -291,7 +280,6 @@ pub fn part1(input: &str) -> u32 {
         let numval = u32::from_str_radix(&l[0..3], 10).unwrap();
         let len = digit_sequence(l, &lookup_numpad, &lookup_arrowpad);
         out += numval * len;
-        //println!("{}", numval * len)
     }
     out
 }
@@ -303,7 +291,6 @@ pub fn part2(input: &str) -> u32 {
         let numval = u32::from_str_radix(&l[0..3], 10).unwrap();
         let len = digit_sequence2(l, &lookup_numpad, &lookup_arrowpad);
         out += numval * len;
-        //println!("{}", numval * len)
     }
     out
 }
@@ -319,7 +306,6 @@ fn digit_sequence2(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) -
                 unreachable!()
             }
         };
-        //print!("a:{} b:{} ", a, b);
         if a == b {
             let len = sequence.len();
             sequence[len - 1].1 += 1;
@@ -347,8 +333,6 @@ fn digit_sequence2(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) -
         let mut a = 0;
         for (b, amount) in sequence.iter() {
             let b = *b;
-            //v<A<AA>>^AvAA<^A>Av<<A>>^AvA^Av<A>^Av<<A>^A>AAvA^Av<A<A>>^AAAvA<^A>A
-            //<vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A
             if a == b {
                 let len = new_sequence.len();
                 new_sequence[len - 1].1 += 1;
@@ -356,7 +340,6 @@ fn digit_sequence2(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) -
             }
             let index = a * 5 * 4 + b * 4;
             let mut last = 0;
-            //let mut consecutives = 1;
             a = b;
             for i in 0..4 {
                 let next = lookup_arrow_pad[index as usize + i];
@@ -367,44 +350,16 @@ fn digit_sequence2(input: &str, lookup_numpad: &[u8], lookup_arrow_pad: &[u8]) -
                 }
                 new_sequence.push((next, 1));
                 if next == 0 {
-                    //new_sequence.push((0, 1));
                     break;
                 }
                 last = next;
-                //consecutives = 1;
             }
             let len = new_sequence.len();
             new_sequence[len - 1].1 += amount - 1;
         }
         sequence = new_sequence;
     }
-    /*for (b, amount) in sequence.iter() {
-        for _ in 0..*amount {
-            print!("{}", DEBUGSTRING.as_bytes()[*b as usize] as char);
-        }
-    }*/
-    //println!();
     sequence
         .iter()
         .fold(0, |acc, (_, amount)| acc + *amount as u32)
-} /*
-
-
-    029A: <vA<AA>>^AvAA<^A>A<v<A>>^AvA^A<vA>^A<v<A>^A>AAvA^A<v<A>A>^AAAvA<^A>A
-          <vA<AA>>^AvAA<^A>Av<<A>>^AvA^A<vA>^Av<<A>^A>AAvA^Av<<A>A>^AAAvA<^A>A
-          v<<A>>^AAAvA^A<vA<AA>>^AvAA<^A>Av<<A>A>^AAAvA<^A>A<vA>^A<A>A
-    980A: <v<A>>^AAAvA^A<vA<AA>>^AvAA<^A>A<v<A>A>^AAAvA<^A>A<vA>^A<A>A
-          v<<A>>^Av<<A>A>^AAvAA<^A>Av<<A>>^AAvA^A<vA>^AA<A>Av<<A>A>^AAAvA<^A>A
-    179A: <v<A>>^A<vA<A>>^AAvAA<^A>A<v<A>>^AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
-          v<<A>>^AAv<<A>A>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>Av<<A>A>^AAvA<^A>A
-    456A: <v<A>>^AA<vA<A>>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>A<v<A>A>^AAvA<^A>A
-
-    379A: <v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
-          v<<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>Av<<A>A>^AAAvA<^A>A
-
-
-    v<<A>>^AAAvA^A<vA<AA>>^AvAA<^A>Av<<A>A>^AAAvA<^A>A<vA>^A<A>A
-  v<<A>>^Av<<A>A>^AAvAA<^A>Av<<A>>^AAvA^A<vA>^AA<A>Av<<A>A>^AAAvA<^A>A
-  v<<A>>^AAv<<A>A>^AAvAA<^A>A<vA>^A<A>A<vA>^A<A>Av<<A>A>^AAvA<^A>A
-  v<<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>Av<<A>A>^AAAvA<^A>A
-    */
+}
